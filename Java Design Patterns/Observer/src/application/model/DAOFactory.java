@@ -2,6 +2,10 @@ package application.model;
 
 public class DAOFactory {
 	
+	public DAOFactory() {
+		
+	}
+	
 	public PersonDAO getPersonDAO() {
 		return new PersonDAO();
 	}
