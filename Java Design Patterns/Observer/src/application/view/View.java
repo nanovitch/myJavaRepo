@@ -38,7 +38,7 @@ public class View extends JFrame implements ActionListener {
 		this.model = model;
 		createUserListeners = new ArrayList<CreateUserListener>();
 		
-		// singleton example: connect to a singleton database instance
+		/* singleton example: connect to a singleton database instance
 		
 		db = Database.getInstance();
 		
@@ -59,7 +59,7 @@ public class View extends JFrame implements ActionListener {
 			}
 		});
 		
-		// end singleton example
+		*/// end singleton example
 		
 		nameField = new JTextField(10);
 		passField = new JTextField(10);

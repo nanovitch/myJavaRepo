@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class Database {
+import application.model.UseDBConnection;
+
+public class Database  implements UseDBConnection {
 	
 	private static Database database = new Database();
 	private Connection con;
@@ -14,7 +16,7 @@ public class Database {
 		
 	}
 	
-	public Connection getConnection() {
+	public Connection getConnection(String DBServer, String DBInstance) {
 		return con;
 	}
 
@@ -53,27 +55,51 @@ public class Database {
 	   Dans eclipse: dans [Run] / [run configurations] / [Arguments] / [VM Arguments]: ajouter
 	   -Djava.library.path="C:\Windows\System32"
 	 */
-	
-	public void connect() throws Exception {
-		if (con != null)  return;
-		try{
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+	@Override
+	public Connection getConnection(String DBServerType, String DBServerName, String DBInstanceName, String DBHostName) throws SQLException {
+		
+		String microsoftDriverName = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+		String oracleDriverName = "";
+		String mysqlDriverName = "";
+		String drivername, url;
+		
+		if(DBServerType.equalsIgnoreCase("MICROSOFT")) {
+			drivername = microsoftDriverName;
+			//url = "jdbc:sqlserver://" + "WIN-EU8KSLB95VS\\MSSQLSERVER;databaseName=AdventureWorksLT2012;integratedSecurity=true";
+			url = "jdbc:sqlserver://" + DBHostName + "\\" + DBServerName + ";databaseName=" + DBInstanceName + ";integratedSecurity=true";
 		}
-		catch (ClassNotFoundException e) {
-			throw new Exception("SQL driver not found!");
+		else if(DBServerType.equalsIgnoreCase("ORACLE")) {
+			drivername = oracleDriverName;
+			url = "";
+		}
+		else if(DBServerType.equalsIgnoreCase("MYSQL")) {
+			drivername = mysqlDriverName;
+			url = "";
+		}
+		else {
+			drivername = "";
+			url = "";
 		}
 		
+		try{
+			Class.forName(drivername);
+		}
+		catch (ClassNotFoundException e) {
+			throw new SQLException("SQL driver not found!");
+		}
+		
+		System.out.println("Connected to database");
+		
 		// For Window authentication you can do something like:
-		String url = "jdbc:sqlserver://WIN-EU8KSLB95VS\\MSSQLSERVER;databaseName=AdventureWorksLT2012;integratedSecurity=true";
-		con = DriverManager.getConnection(url);
+		return DriverManager.getConnection(url);
 		
 		// For SQL Server authentication you can do something like:
 		//String url = "jdbc:sqlserver://WIN-EU8KSLB95VS\\MSSQLSERVER;databaseName=AdventureWorksLT2012";
 		//con = DriverManager.getConnection(url, "sa", "sa password");
 		
-		System.out.println("Connected to database");
+		
 	}
-	
+	/*
 	public void disconnect() {
 		if (con != null) {
 			try {
@@ -86,7 +112,6 @@ public class Database {
 		con = null;
 		System.out.println("Disconnected from database");
 	}
-	
-	
 
+	*/
 }

@@ -14,11 +14,16 @@ import application.data.Database;
  * SQL code container
  */
 
-public class PersonDAO {
+public class PersonDAO  implements UseDBConnection {
 	
-	public int addPerson(Person person) throws SQLException {
+	private String DBServerType = "MICROSOFT";
+	private String DBServerName = "MSSQLSERVER";
+	private String DBInstanceName = "AdventureWorksLT2012";
+	private String DBHostName = "WIN-EU8KSLB95VS";
+	
+	public int addPerson(Person person) throws Exception {
 		
-		Connection con = Database.getInstance().getConnection();
+		Connection con = Database.getInstance().getConnection(DBServerType, DBServerName, DBInstanceName, DBHostName);
 		
 		PreparedStatement p = con.prepareStatement("INSERT INTO AdventureWorksLT2012.dbo.People (name, password) VALUES (?, ?)");
 		
@@ -28,12 +33,20 @@ public class PersonDAO {
 		
 		p.close();
 		
+		try {
+			con.close();
+			System.out.println("Disconnected from database");
+		}
+		catch (SQLException e) {
+			System.out.println("Cannot close connection to database");
+		}
+		
 		return inserted;
 	}
 	
 	public int updatePerson(Person person) throws SQLException {
 		
-		Connection con = Database.getInstance().getConnection();
+		Connection con = Database.getInstance().getConnection(DBServerType, DBServerName, DBInstanceName, DBHostName);
 		
 		PreparedStatement p = con.prepareStatement("UPDATE AdventureWorksLT2012.dbo.People SET name=?, password=? WHERE id=?");
 		
@@ -44,13 +57,21 @@ public class PersonDAO {
 		
 		p.close();
 		
+		try {
+			con.close();
+			System.out.println("Disconnected from database");
+		}
+		catch (SQLException e) {
+			System.out.println("Cannot close connection to database");
+		}
+		
 		return updated;
 		
 	}
 	
 	public int deletePerson(int id) throws SQLException {
 		
-		Connection con = Database.getInstance().getConnection();
+		Connection con = Database.getInstance().getConnection(DBServerType, DBServerName, DBInstanceName, DBHostName);
 		
 		PreparedStatement p = con.prepareStatement("DELETE FROM AdventureWorksLT2012.dbo.People WHERE id=?");
 		
@@ -59,13 +80,21 @@ public class PersonDAO {
 		
 		p.close();
 		
+		try {
+			con.close();
+			System.out.println("Disconnected from database");
+		}
+		catch (SQLException e) {
+			System.out.println("Cannot close connection to database");
+		}
+		
 		return deleted;
 		
 	}
 	
 	public int deleteAll() throws SQLException {
 		
-		Connection con = Database.getInstance().getConnection();
+		Connection con = Database.getInstance().getConnection(DBServerType, DBServerName, DBInstanceName, DBHostName);
 		
 		PreparedStatement p = con.prepareStatement("DELETE FROM AdventureWorksLT2012.dbo.People");
 		
@@ -73,13 +102,21 @@ public class PersonDAO {
 		
 		p.close();
 		
+		try {
+			con.close();
+			System.out.println("Disconnected from database");
+		}
+		catch (SQLException e) {
+			System.out.println("Cannot close connection to database");
+		}
+		
 		return deleted;
 		
 	}
 	
 	public Person getPerson(int id) throws SQLException {
 		
-		Connection con = Database.getInstance().getConnection();
+		Connection con = Database.getInstance().getConnection(DBServerType, DBServerName, DBInstanceName, DBHostName);
 		
 		String sql = "SELECT name, password FROM AdventureWorksLT2012.dbo.People WHERE id=?";
 		
@@ -100,6 +137,14 @@ public class PersonDAO {
 		p.close();
 		result.close();
 		
+		try {
+			con.close();
+			System.out.println("Disconnected from database");
+		}
+		catch (SQLException e) {
+			System.out.println("Cannot close connection to database");
+		}
+		
 		return person;
 	}
 	
@@ -107,7 +152,7 @@ public class PersonDAO {
 		
 		List<Person> people = new ArrayList<Person>();
 		
-		Connection con = Database.getInstance().getConnection();
+		Connection con = Database.getInstance().getConnection(DBServerType, DBServerName, DBInstanceName, DBHostName);
 		
 		String sql = "SELECT id, name, password FROM AdventureWorksLT2012.dbo.People ORDER BY id";
 		
@@ -125,7 +170,21 @@ public class PersonDAO {
 		results.close();
 		selectStatement.close();
 		
+		try {
+			con.close();
+			System.out.println("Disconnected from database");
+		}
+		catch (SQLException e) {
+			System.out.println("Cannot close connection to database");
+		}
+		
 		return people;
+	}
+
+	@Override
+	public Connection getConnection(String DBServerType, String DBServerName, String DBInstanceName, String DBHostName) throws SQLException {
+		// TODO Auto-generated method stub
+		return Database.getInstance().getConnection(DBServerType, DBServerName, DBInstanceName, DBHostName);
 	}
 
 }
