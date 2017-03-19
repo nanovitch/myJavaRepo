@@ -5,25 +5,21 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import application.controller.CreateUserListener;
-import application.data.Database;
 import application.model.Model;
 
 public class View extends JFrame implements ActionListener {
 	
 	private Model model;
 	private ArrayList<CreateUserListener> createUserListeners;
-	private Database db;
+	
 	
 	private JButton createUser;
 	private JTextField nameField;

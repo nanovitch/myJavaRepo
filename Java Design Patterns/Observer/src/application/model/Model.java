@@ -13,7 +13,7 @@ public class Model implements CreateUserListener{
 		
 		System.out.println("Model: Create user event received: " + event.getName() + " : " + event.getPassword());
 		try {
-			daoFactory.getPersonDAO().addPerson(new Person(event.getName(), event.getPassword()));
+			((PersonDAO) daoFactory.getDAOObject("PERSON")).addPerson(new Person(event.getName(), event.getPassword()));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
