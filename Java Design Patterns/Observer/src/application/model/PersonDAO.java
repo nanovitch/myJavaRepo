@@ -16,14 +16,23 @@ import application.data.Database;
 
 public class PersonDAO  implements UseDBConnection {
 	
-	private String DBServerType = "MICROSOFT";
-	private String DBServerName = "MSSQLSERVER";
-	private String DBInstanceName = "AdventureWorksLT2012";
-	private String DBHostName = "WIN-EU8KSLB95VS";
+	private String DBServerType;
+	private String DBServerName;
+	private String DBInstanceName;
+	private String DBHostName;
 	
+	
+	
+	public PersonDAO(String dBServerType, String dBServerName, String dBInstanceName, String dBHostName) {
+		DBServerType = dBServerType;
+		DBServerName = dBServerName;
+		DBInstanceName = dBInstanceName;
+		DBHostName = dBHostName;
+	}
+
 	public int addPerson(Person person) throws Exception {
 		
-		Connection con = Database.getInstance().getConnection(DBServerType, DBServerName, DBInstanceName, DBHostName);
+		Connection con = getConnection();
 		
 		PreparedStatement p = con.prepareStatement("INSERT INTO AdventureWorksLT2012.dbo.People (name, password) VALUES (?, ?)");
 		
@@ -46,7 +55,7 @@ public class PersonDAO  implements UseDBConnection {
 	
 	public int updatePerson(Person person) throws SQLException {
 		
-		Connection con = Database.getInstance().getConnection(DBServerType, DBServerName, DBInstanceName, DBHostName);
+		Connection con = getConnection();
 		
 		PreparedStatement p = con.prepareStatement("UPDATE AdventureWorksLT2012.dbo.People SET name=?, password=? WHERE id=?");
 		
@@ -71,7 +80,7 @@ public class PersonDAO  implements UseDBConnection {
 	
 	public int deletePerson(int id) throws SQLException {
 		
-		Connection con = Database.getInstance().getConnection(DBServerType, DBServerName, DBInstanceName, DBHostName);
+		Connection con = getConnection();
 		
 		PreparedStatement p = con.prepareStatement("DELETE FROM AdventureWorksLT2012.dbo.People WHERE id=?");
 		
@@ -94,7 +103,7 @@ public class PersonDAO  implements UseDBConnection {
 	
 	public int deleteAll() throws SQLException {
 		
-		Connection con = Database.getInstance().getConnection(DBServerType, DBServerName, DBInstanceName, DBHostName);
+		Connection con = getConnection();
 		
 		PreparedStatement p = con.prepareStatement("DELETE FROM AdventureWorksLT2012.dbo.People");
 		
@@ -116,7 +125,7 @@ public class PersonDAO  implements UseDBConnection {
 	
 	public Person getPerson(int id) throws SQLException {
 		
-		Connection con = Database.getInstance().getConnection(DBServerType, DBServerName, DBInstanceName, DBHostName);
+		Connection con = getConnection();
 		
 		String sql = "SELECT name, password FROM AdventureWorksLT2012.dbo.People WHERE id=?";
 		
@@ -152,7 +161,7 @@ public class PersonDAO  implements UseDBConnection {
 		
 		List<Person> people = new ArrayList<Person>();
 		
-		Connection con = Database.getInstance().getConnection(DBServerType, DBServerName, DBInstanceName, DBHostName);
+		Connection con = getConnection();
 		
 		String sql = "SELECT id, name, password FROM AdventureWorksLT2012.dbo.People ORDER BY id";
 		
@@ -182,9 +191,15 @@ public class PersonDAO  implements UseDBConnection {
 	}
 
 	@Override
-	public Connection getConnection(String DBServerType, String DBServerName, String DBInstanceName, String DBHostName) throws SQLException {
+	public Connection getConnection() {
 		// TODO Auto-generated method stub
-		return Database.getInstance().getConnection(DBServerType, DBServerName, DBInstanceName, DBHostName);
+		try {
+			return new Database(DBServerType, DBServerName, DBInstanceName, DBHostName).getConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

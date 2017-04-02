@@ -21,7 +21,7 @@ public class Application {
 	
 	public static void runApp() {
 		Model model = new Model();
-		View view = new View(model);
+		View view = new View(/*model*/);
 		Controller controller = new Controller(model, view);
 		
 		view.addCreateUserListener(controller);

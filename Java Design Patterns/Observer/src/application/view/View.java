@@ -13,11 +13,11 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import application.controller.CreateUserListener;
-import application.model.Model;
+//import application.model.Model;
 
 public class View extends JFrame implements ActionListener {
 	
-	private Model model;
+	//private Model model;
 	private ArrayList<CreateUserListener> createUserListeners;
 	
 	
@@ -27,11 +27,11 @@ public class View extends JFrame implements ActionListener {
 	private JTextField repeatPassField;
 	
 
-	public View(Model model) {
+	public View(/*Model model*/) {
 		
 		super("MVC Demo");
 		
-		this.model = model;
+		//this.model = model;
 		createUserListeners = new ArrayList<CreateUserListener>();
 		
 		/* singleton example: connect to a singleton database instance
